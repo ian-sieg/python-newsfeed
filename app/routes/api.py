@@ -43,12 +43,13 @@ def login():
     
     try:
         user = db.query(User).filter(User.email == data['email']).one()
-        if user.verify_password(data['password']) == False:
-            return jsonify(message = 'Incorrect credentials'), 400
-        session.clear()
-        session['user_id'] = user.id
-        session['logged_in'] = True
-        return jsonify(id = user.id)
     except:
         print(sys.exc_info()[0])
         return jsonify(message = 'Incorrect credentials'), 400
+    
+    if user.verify_password(data['password']) == False:
+        return jsonify(message = 'Incorrect credentials'), 400
+    session.clear()
+    session['user_id'] = user.id
+    session['logged_in'] = True
+    return jsonify(id = user.id)
